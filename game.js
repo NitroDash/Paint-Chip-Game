@@ -32,21 +32,25 @@ var loadLevel=function(id,callback) {
         bg_canvas.height=result.grid.length*140;
         level.grid=[];
         level.entities=[];
-        for (var y=0; y<result.grid.length; y++) {
+        for (var x=0; x<result.grid[0].length; x++) {
             level.grid.push([]);
-            for (var x=0; x<result.grid[0].length; x++) {
+            for (var y=0; y<result.grid.length; y++) {
                 switch(result.grid[y].charAt(x)) {
                     case ' ':
-                        level.grid[y].push(0);
+                        level.grid[x].push(0);
                         break;
                     case 'm':
-                        level.grid[y].push(1);
+                        level.grid[x].push(1);
                         renderPantone(bg_ctx,black,"SOLID","BLACK",x*100,y*140,100,140);
                         break;
                     case 'p':
-                        level.grid[y].push(0);
+                        level.grid[x].push(0);
                         p=player(x*100+20,y*140+40)
-                        level.entities.push(p);
+                        level.entities.splice(0,0,p);
+                        break;
+                    case 'M':
+                        level.grid[x].push(0);
+                        level.entities.push(rollingBlock(x*100,y*140));
                         break;
                 }
                 
@@ -66,19 +70,20 @@ var update=function() {
     for (var i=0; i<level.entities.length; i++) {
         level.entities[i].update();
     }
+    keys[4].isPressed=false;
 }
 
 var calcCenter=function() {
     var c={};
-    if (level.grid[0].length*100<=window.innerWidth) {
-        c.x=level.grid[0].length*50;
+    if (level.grid.length*100<=window.innerWidth) {
+        c.x=level.grid.length*50;
     } else {
-        c.x=Math.max(Math.min(p.rect.getCenterX(),level.grid[0].length*100-window.innerWidth/2),window.innerWidth/2);
+        c.x=Math.max(Math.min(p.rect.getCenterX(),level.grid.length*100-window.innerWidth/2),window.innerWidth/2);
     }
-    if (level.grid.length*140<=window.innerHeight) {
-        c.y=level.grid.length*70;
+    if (level.grid[0].length*140<=window.innerHeight) {
+        c.y=level.grid[0].length*70;
     } else {
-        c.y=Math.max(Math.min(p.rect.getCenterY(),level.grid.length*140-window.innerHeight/2),window.innerHeight/2);
+        c.y=Math.max(Math.min(p.rect.getCenterY(),level.grid[0].length*140-window.innerHeight/2),window.innerHeight/2);
     }
     return c;
 }

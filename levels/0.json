@@ -1,8 +1,10 @@
 {
     "grid":[
         "m              m",
-        "m       m      m",
-        "m p            m",
+        "m              m",
+        "m              m",
+        "m     M  m     m",
+        "m p   M M  M   m",
         "mmmmmmmmmmmmmmmm"
     ]
 }
