@@ -3,13 +3,25 @@ var ctx;
 var bg_canvas;
 var bg_ctx;
 
+var levelTile_canvas;
+var levelTile_ctx;
+
 var white="#fff";
 var black="#000";
+var gold="#ffd700";
 var pantoneFont="bold 15px sans-serif";
 
 var p={};
 
 var level={};
+var levelNum=0;
+var loading=false;
+
+var levelEndAnim=0;
+var levelEndAnimDisplayed=false;
+var waitCounter=0;
+
+var solid=[false,true,true];
 
 var init=function() {
     var canvas=document.getElementById("canvas");
@@ -22,11 +34,15 @@ var init=function() {
     bg_ctx=bg_canvas.getContext("2d");
     ctx.font=pantoneFont;
     bg_ctx.font=pantoneFont;
-    loadLevel(0,gameLoop);
+    levelTile_canvas=document.createElement("canvas");
+    levelTile_canvas.width=100;
+    levelTile_canvas.height=140;
+    levelTile_ctx=levelTile_canvas.getContext("2d");
+    loadLevel(levelNum,gameLoop);
 }
 
 var containsSolidGround=function(x,y) {
-    if (level.grid[Math.floor(x/100)][Math.floor(y/140)]==1) {
+    if (solid[level.grid[Math.floor(x/100)][Math.floor(y/140)]]) {
         return true;
     }
     for (var i=0; i<level.entities.length; i++) {
@@ -64,10 +80,16 @@ var loadLevel=function(id,callback) {
                         level.grid[x].push(0);
                         level.entities.push(rollingBlock(x*100,y*140));
                         break;
+                    case 'g':
+                        level.grid[x].push(2);
+                        renderPantone(bg_ctx,gold,"GOLDEN","GOAL",x*100,y*140,100,140);
+                        break;
                 }
                 
             }
         }
+        level.width=level.grid.length;
+        level.height=level.grid[0].length;
         callback();
     });
 }
@@ -79,10 +101,49 @@ var gameLoop=function() {
 }
 
 var update=function() {
+    if (loading) {return;}
+    if (waitCounter>0) {waitCounter--;return;}
+    if (levelEndAnim>0) {
+        levelEndAnim-=10;
+        if (levelEndAnim<=0) {
+            levelEndAnim=0;
+            loading=true;
+            waitCounter=40;
+            loadLevel(levelNum,function() {
+                loading=false;
+            });
+        }
+        return;
+    } else if (levelEndAnim<=0&&levelEndAnimDisplayed) {
+        levelEndAnim-=10;
+        if (levelEndAnim<-ctx.canvas.height/2) {
+            levelEndAnim=0;
+            levelEndAnimDisplayed=false;
+        }
+        return;
+    }
     for (var i=0; i<level.entities.length; i++) {
         level.entities[i].update();
     }
     keys[4].isPressed=false;
+}
+
+var startNextLevelLoad=function() {
+    levelEndAnim=ctx.canvas.height/2;
+    waitCounter=30;
+    levelEndAnimDisplayed=true;
+    levelNum++;
+    renderPantone(levelTile_ctx,getRandomRGB(),"LEVEL "+(levelNum+1),"",0,0,100,140);
+}
+
+var RGBChars=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'];
+
+var getRandomRGB=function() {
+    var ans="#";
+    for (var i=0; i<6; i++) {
+        ans+=RGBChars[Math.floor(Math.random()*16)];
+    }
+    return ans;
 }
 
 var calcCenter=function() {
@@ -110,6 +171,16 @@ var render=function() {
         level.entities[i].render(ctx);
     }
     ctx.translate(center.x-window.innerWidth/2,center.y-window.innerHeight/2);
+    if (levelEndAnimDisplayed) {
+        for (var x=Math.floor(ctx.canvas.width/2)%100-100; x<ctx.canvas.width; x+=100) {
+            for (var y=ctx.canvas.height/2+Math.abs(levelEndAnim); y<ctx.canvas.height; y+=140) {
+                ctx.drawImage(levelTile_canvas,x,y);
+            }
+            for (var y=ctx.canvas.height/2-Math.abs(levelEndAnim)-140; y>-140; y-=140) {
+                ctx.drawImage(levelTile_canvas,x,y);
+            }
+        }
+    }
 }
 
 var renderPantone=function(ctx,color,text1,text2,x,y,w,h) {

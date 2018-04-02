@@ -21,6 +21,11 @@ var rollingBlock=function(x,y) {
                         if (!receivedBoost) {
                             this.rect.translate(level.entities[i].dx,level.entities[i].dy);
                             receivedBoost=true;
+                            for (var j=0; j<level.entities.length; j++) {
+                                if (level.entities[j].rect.intersects(this.rect)&&level.entities[j].rect.getBottom()==this.rect.y&&!level.entities[j].receivedBoost) {
+                                    level.entities[j].rect.translate(level.entities[i].dx,level.entities[i].dy);
+                                }
+                            }
                         }
                         break;
                     case 1:
@@ -37,7 +42,7 @@ var rollingBlock=function(x,y) {
         }
         for (var x=Math.floor(this.rect.x/100); x<=Math.floor(this.rect.getRight()/100); x++) {
             for (var y=Math.floor(this.rect.y/140); y<=Math.floor(this.rect.getBottom()/140); y++) {
-                if (level.grid[x][y]==1) {
+                if (solid[level.grid[x][y]]) {
                     tileRect.x=x*100;
                     tileRect.y=y*140;
                     switch(tileRect.eject(this.rect)) {
@@ -79,13 +84,13 @@ var rollingBlock=function(x,y) {
                     p.hitCeiling();
                     break;
                 case 2:
-                    if (p.grounded) {
+                    if (p.grounded&&keys[3].isDown()) {
                         this.dx+=0.1;
                         this.isPushed=true;
                     }
                     break;
                 case 3:
-                    if (p.grounded) {
+                    if (p.grounded&&keys[2].isDown()) {
                         this.dx-=0.1;
                         this.isPushed=true;
                     }

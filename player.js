@@ -18,7 +18,27 @@ var player=function(x,y) {
     p.JUMP_SPEED=-13;
     p.GRAVITY=0.5;
     p.grounded=true;
+    p.endLevelAnim=false;
+    p.endLevelAnimCounter=0;
     p.update=function() {
+        if (this.endLevelAnim) {
+            if (this.endLevelAnimCounter<level.width+level.height-1) {
+                if (this.endLevelAnimCounter>=0) {
+                    for (var y=Math.max(0,this.endLevelAnimCounter-level.width+1); y<Math.min(this.endLevelAnimCounter+1,level.height); y++) {
+                        if (level.grid[this.endLevelAnimCounter-y][y]==1) {
+                            renderPantone(bg_ctx,gold,"GOLDEN","GOAL",(this.endLevelAnimCounter-y)*100,y*140,100,140);
+                        }
+                    }
+                }
+                this.endLevelAnimCounter*=-1;
+                if (this.endLevelAnimCounter>=0) {
+                    this.endLevelAnimCounter++;
+                }
+            } else {
+                startNextLevelLoad();
+            }
+            return;
+        }
         if (keys[2].isDown()) {
             this.dx=-this.WALK_SPEED;
         } else if (keys[3].isDown()) {
@@ -37,12 +57,15 @@ var player=function(x,y) {
         this.grounded=false;
         for (var x=Math.floor(this.rect.x/100); x<=Math.floor(this.rect.getRight()/100); x++) {
             for (var y=Math.floor(this.rect.y/140); y<=Math.floor(this.rect.getBottom()/140); y++) {
-                if (level.grid[x][y]==1) {
+                if (solid[level.grid[x][y]]) {
                     tileRect.x=x*100;
                     tileRect.y=y*140;
                     switch(tileRect.eject(this.rect)) {
                         case 0:
                             this.hitFloor();
+                            if (level.grid[x][y]==2&&tileRect.contains(this.rect.getCenterX(),this.rect.getBottom()+1)) {
+                                this.endLevelAnim=true;
+                            }
                             break;
                         case 1:
                             this.hitCeiling();
