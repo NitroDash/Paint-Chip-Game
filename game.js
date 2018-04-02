@@ -25,6 +25,18 @@ var init=function() {
     loadLevel(0,gameLoop);
 }
 
+var containsSolidGround=function(x,y) {
+    if (level.grid[Math.floor(x/100)][Math.floor(y/140)]==1) {
+        return true;
+    }
+    for (var i=0; i<level.entities.length; i++) {
+        if (level.entities[i].isSolid&&level.entities[i].rect.contains(x,y)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 var loadLevel=function(id,callback) {
     loadJSON("levels/"+id+".json",function(result) {
         bg_ctx.clearRect(0,0,bg_canvas.width,bg_canvas.height);

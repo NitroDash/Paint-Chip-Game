@@ -8,12 +8,13 @@ var rollingBlock=function(x,y) {
     r.dy=0;
     r.grounded=true;
     r.isPushed=false;
+    r.isSolid=true;
     r.update=function() {
         this.rect.translate(this.dx,this.dy);
         this.grounded=false;
         var receivedBoost=false;
         for (var i=1; i<level.entities.length; i++) {
-            if (level.entities[i].pushIfClear&&level.entities[i]!=this&&level.entities[i].rect.intersects(this.rect)) {
+            if (level.entities[i].canBePushed&&level.entities[i]!=this&&level.entities[i].rect.intersects(this.rect)) {
                 switch (level.entities[i].rect.eject(this.rect)) {
                     case 0:
                         this.hitFloor();
@@ -58,6 +59,12 @@ var rollingBlock=function(x,y) {
                             break;
                     }
                 }
+            }
+        }
+        if (!containsSolidGround(this.rect.x+15,this.rect.getBottom()+1)&&!containsSolidGround(this.rect.getRight()-15,this.rect.getBottom()+1)) {
+            if (this.grounded) {
+                this.dy+=3;
+                this.grounded=false;
             }
         }
         if (!this.grounded) {
@@ -117,23 +124,6 @@ var rollingBlock=function(x,y) {
         this.dy=0;
         this.grounded=true;
     }
-    r.pushIfClear=function(x,y,dir) {
-        if (level.grid[Math.floor(x/100)][Math.floor(y/140)]==1) {
-            return false;
-        }
-        for (var i=0; i<level.entities.length; i++) {
-            if (level.entities[i].rect.contains(x,y)&&level.entities[i].pushIfClear) {
-                if (level.entities[i].pushIfClear(x+100*dir,y,dir)) {
-                    this.dx+=0.1*dir;
-                    this.isPushed=true;
-                    level.entities[i].rect.eject(this.rect);
-                    return true;
-                }
-            }
-        }
-        this.dx+=0.1*dir;
-        this.isPushed=true;
-        return true;
-    }
+    r.canBePushed=true;
     return r;
 }
