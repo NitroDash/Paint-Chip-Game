@@ -6,7 +6,7 @@ var entity=function(x,y,w,h) {
     return e;
 }
 
-var keys=[keyGroup(38,87),keyGroup(40,83),keyGroup(65,37),keyGroup(39,68),keyboard(32)];
+var keys=[keyGroup(38,87),keyGroup(40,83),keyGroup(65,37),keyGroup(39,68),keyboard(32),keyboard(82)];
 
 var tileRect=rect(0,0,100,140);
 
@@ -17,7 +17,7 @@ var player=function(x,y) {
     p.WALK_SPEED=4;
     p.JUMP_SPEED=-13;
     p.GRAVITY=0.5;
-    p.grounded=true;
+    p.grounded=true;82
     p.endLevelAnim=false;
     p.endLevelAnimCounter=0;
     p.update=function() {
@@ -35,7 +35,7 @@ var player=function(x,y) {
                     this.endLevelAnimCounter++;
                 }
             } else {
-                startNextLevelLoad();
+                startLevelLoad(1,30);
             }
             return;
         }
@@ -65,6 +65,7 @@ var player=function(x,y) {
                             this.hitFloor();
                             if (level.grid[x][y]==2&&tileRect.contains(this.rect.getCenterX(),this.rect.getBottom()+1)) {
                                 this.endLevelAnim=true;
+                                this.endLevelAnimCounter=0;
                             }
                             break;
                         case 1:
@@ -78,7 +79,9 @@ var player=function(x,y) {
             if (level.entities[i].rect.intersects(this.rect)) {
                 switch(level.entities[i].rect.getEjectDir(this.rect)) {
                     case 0:
-                        this.hitFloor();
+                        if (this.rect.getHorizOverlap(level.entities[i].rect)>5) {
+                            this.hitFloor();
+                        }
                         break;
                 }
             }

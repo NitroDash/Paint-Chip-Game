@@ -1,9 +1,12 @@
 {
     "grid":[
-        "m                    m",
-        "m     M              m",
-        "m p M M              m",
-        "mmmmmmmmmmmm mm mmmmgm",
-        "mmmmmmmmmmmmmmmmmmmmmm"
+        "m        m",
+        "m        m",
+        "m p      m",
+        "mmmmttmmgm"
+    ],
+    "specialText":[
+        ["ARROW","KEYS"],
+        ["(OR WASD)","TO MOVE"]
     ]
 }

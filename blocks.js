@@ -32,10 +32,12 @@ var rollingBlock=function(x,y) {
                         break;
                     case 2:
                     case 3:
-                        var avgDx=(this.dx+level.entities[i].dx)/2;
-                        this.dx=avgDx;
-                        level.entities[i].dx=avgDx;
-                        level.entities[i].isPushed=true;
+                        if (Math.abs(this.rect.getCenterX()-level.entities[i].rect.getCenterX())>Math.abs(this.rect.getCenterX()+this.dx-level.entities[i].rect.getCenterX()-level.entities[i].dx)) {
+                            var avgDx=(this.dx+level.entities[i].dx)/2;
+                            this.dx=avgDx;
+                            level.entities[i].dx=avgDx;
+                            level.entities[i].isPushed=true;
+                        }
                         break;
                 }
             }

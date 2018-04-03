@@ -11,6 +11,8 @@ var black="#000";
 var gold="#ffd700";
 var pantoneFont="bold 15px sans-serif";
 
+var resetCounter=0;
+
 var p={};
 
 var level={};
@@ -60,6 +62,7 @@ var loadLevel=function(id,callback) {
         bg_canvas.height=result.grid.length*140;
         level.grid=[];
         level.entities=[];
+        var textId=0;
         for (var x=0; x<result.grid[0].length; x++) {
             level.grid.push([]);
             for (var y=0; y<result.grid.length; y++) {
@@ -83,6 +86,11 @@ var loadLevel=function(id,callback) {
                     case 'g':
                         level.grid[x].push(2);
                         renderPantone(bg_ctx,gold,"GOLDEN","GOAL",x*100,y*140,100,140);
+                        break;
+                    case 't':
+                        level.grid[x].push(1);
+                        renderPantone(bg_ctx,black,result.specialText[textId][0],result.specialText[textId][1],x*100,y*140,100,140);
+                        textId++;
                         break;
                 }
                 
@@ -126,13 +134,25 @@ var update=function() {
         level.entities[i].update();
     }
     keys[4].isPressed=false;
+    if (keys[5].isDown) {
+        resetCounter+=1;
+        if (resetCounter>=50) {
+            startLevelLoad(0,0);
+            resetCounter=0;
+        }
+    } else {
+        resetCounter-=5;
+        if (resetCounter<0){
+            resetCounter=0;
+        }
+    }
 }
 
-var startNextLevelLoad=function() {
+var startLevelLoad=function(levelsIncremented,delay) {
     levelEndAnim=ctx.canvas.height/2;
-    waitCounter=30;
+    waitCounter=delay;
     levelEndAnimDisplayed=true;
-    levelNum++;
+    levelNum+=levelsIncremented;
     renderPantone(levelTile_ctx,getRandomRGB(),"LEVEL "+(levelNum+1),"",0,0,100,140);
 }
 
@@ -171,6 +191,14 @@ var render=function() {
         level.entities[i].render(ctx);
     }
     ctx.translate(center.x-window.innerWidth/2,center.y-window.innerHeight/2);
+    if (resetCounter>0) {
+        ctx.fillStyle=white;
+        ctx.fillRect(2,2,54,16);
+        ctx.fillStyle=black;
+        ctx.fillRect(4,4,50,12);
+        ctx.fillStyle="#f00";
+        ctx.fillRect(4,4,resetCounter,12);
+    }
     if (levelEndAnimDisplayed) {
         for (var x=Math.floor(ctx.canvas.width/2)%100-100; x<ctx.canvas.width; x+=100) {
             for (var y=ctx.canvas.height/2+Math.abs(levelEndAnim); y<ctx.canvas.height; y+=140) {

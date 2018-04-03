@@ -50,5 +50,11 @@ var rect=function(x,y,w,h) {
     r.contains=function(x,y) {
         return (this.x<=x&&this.getRight()>=x&&this.y<=y&&this.getBottom()>=y);
     }
+    r.getHorizOverlap=function(other) {
+        return Math.max(Math.min(this.getRight(),other.getRight())-Math.max(this.x,other.x),0);
+    }
+    r.getVertOverlap=function(other) {
+        return Math.max(Math.min(this.getBottom(),other.getBottom())-Math.max(this.y,other.y),0);
+    }
     return r;
 }
