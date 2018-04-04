@@ -52,6 +52,10 @@ var rollingBlock=function(x,y) {
                     switch(tileRect.eject(this.rect)) {
                         case 0:
                             this.hitFloor();
+                            if (level.grid[x][y]==4&&x==Math.floor(this.rect.getCenterX()/100)) {
+                                this.dy=-18;
+                                this.grounded=false;
+                            }
                             break;
                         case 1:
                             this.dy=(this.dy>0)?this.dy:0;

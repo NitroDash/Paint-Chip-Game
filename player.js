@@ -81,6 +81,10 @@ var player=function(x,y) {
                                 this.endLevelAnim=true;
                                 this.endLevelAnimCounter=0;
                             }
+                            if (level.grid[x][y]==4&&tileRect.contains(this.rect.getCenterX(),this.rect.getBottom()+1)) {
+                                this.dy=1.4*this.JUMP_SPEED;
+                                this.grounded=false;
+                            }
                             break;
                         case 1:
                             this.hitCeiling();

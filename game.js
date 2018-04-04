@@ -10,6 +10,7 @@ var white="#fff";
 var black="#000";
 var gold="#ffd700";
 var red="#f00";
+var spring="#00ff7f";
 var pantoneFont="bold 15px sans-serif";
 
 var resetCounter=0;
@@ -26,9 +27,10 @@ var levelEndAnim=0;
 var levelEndAnimDisplayed=false;
 var waitCounter=0;
 
-var solid=[false,true,true,true];
+var solid=[false,true,true,true,true];
 
 var init=function() {
+    debug=false;
     var canvas=document.getElementById("canvas");
     canvas.width=window.innerWidth;
     canvas.height=window.innerHeight;
@@ -98,6 +100,10 @@ var loadLevel=function(id,callback) {
                     case 'l':
                         level.grid[x].push(3);
                         renderPantone(bg_ctx,red,"LAVA RED","",x*100,y*140,100,140);
+                        break;
+                    case 's':
+                        level.grid[x].push(4);
+                        renderPantone(bg_ctx,spring,"SPRING","GREEN",x*100,y*140,100,140);
                         break;
                 }
                 
