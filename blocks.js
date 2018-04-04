@@ -21,9 +21,11 @@ var rollingBlock=function(x,y) {
                         if (!receivedBoost) {
                             this.rect.translate(level.entities[i].dx,level.entities[i].dy);
                             receivedBoost=true;
-                            for (var j=0; j<level.entities.length; j++) {
-                                if (level.entities[j].rect.intersects(this.rect)&&level.entities[j].rect.getBottom()==this.rect.y&&!level.entities[j].receivedBoost) {
-                                    level.entities[j].rect.translate(level.entities[i].dx,level.entities[i].dy);
+                            if (!solid[level.grid[Math.floor((this.rect.getCenterX()+((level.entities[i].dx>0)?this.rect.w/2:-this.rect.w/2))/100)][Math.floor(this.rect.getCenterY()/140)]]) {
+                                for (var j=0; j<level.entities.length; j++) {
+                                    if (level.entities[j].rect.intersects(this.rect)&&level.entities[j].rect.getBottom()==this.rect.y&&!level.entities[j].receivedBoost) {
+                                        level.entities[j].rect.translate(level.entities[i].dx,level.entities[i].dy);
+                                    }
                                 }
                             }
                         }
@@ -80,10 +82,18 @@ var rollingBlock=function(x,y) {
         if (this.rect.intersects(p.rect)) {
             switch(this.rect.eject(p.rect)) {
                 case 0:
-                    p.hitFloor();
+                    if (containsSolidGround(p.rect.getCenterX(),p.rect.y+p.rect.h/4)) {
+                        p.die();
+                    } else {
+                        p.hitFloor();
+                    }
                     break;
                 case 1:
-                    p.hitCeiling();
+                    if (containsSolidGround(p.rect.getCenterX(),p.rect.getBottom()-p.rect.h/4)) {
+                        p.die();
+                    } else {
+                        p.hitCeiling();
+                    }
                     break;
                 case 2:
                     if (p.grounded&&keys[3].isDown()) {

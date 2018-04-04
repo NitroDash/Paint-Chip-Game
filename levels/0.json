@@ -1,9 +1,9 @@
 {
     "grid":[
-        "m        m",
-        "m        m",
-        "m p      m",
-        "mmmmttmmgm"
+        "m         m",
+        "m         m",
+        "m p       m",
+        "mmmmmttmmgm"
     ],
     "specialText":[
         ["ARROW","KEYS"],

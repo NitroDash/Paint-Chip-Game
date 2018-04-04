@@ -6,7 +6,7 @@ var entity=function(x,y,w,h) {
     return e;
 }
 
-var keys=[keyGroup(38,87),keyGroup(40,83),keyGroup(65,37),keyGroup(39,68),keyboard(32),keyboard(82)];
+var keys=[keyGroup(38,87),keyGroup(40,83),keyGroup(65,37),keyGroup(39,68),keyboard(32),keyboard(82),keyboard(78)];
 
 var tileRect=rect(0,0,100,140);
 
@@ -20,7 +20,17 @@ var player=function(x,y) {
     p.grounded=true;82
     p.endLevelAnim=false;
     p.endLevelAnimCounter=0;
+    p.dead=false;
     p.update=function() {
+        if (this.dead) {
+            this.dy+=this.GRAVITY;
+            this.rect.translate(this.dx,this.dy);
+            if (this.rect.y>level.height*140) {
+                startLevelLoad(0,0);
+                this.dead=false;
+            }
+            return;
+        }
         if (this.endLevelAnim) {
             if (this.endLevelAnimCounter<level.width+level.height-1) {
                 if (this.endLevelAnimCounter>=0) {
@@ -60,6 +70,10 @@ var player=function(x,y) {
                 if (solid[level.grid[x][y]]) {
                     tileRect.x=x*100;
                     tileRect.y=y*140;
+                    if (level.grid[x][y]==3&&(Math.floor(this.rect.getCenterY()/140)==y||(Math.floor(this.rect.getCenterX()/100)==x))) {
+                        this.die();
+                        return;
+                    }
                     switch(tileRect.eject(this.rect)) {
                         case 0:
                             this.hitFloor();
@@ -86,6 +100,9 @@ var player=function(x,y) {
                 }
             }
         }
+        if (keys[6].isDown&&debug) {
+            startLevelLoad(1,0);
+        }
     };
     p.hitFloor=function() {
         if (this.dy>=0) {
@@ -95,6 +112,15 @@ var player=function(x,y) {
     }
     p.hitCeiling=function() {
         this.dy=(this.dy>0)?this.dy:0;
+    }
+    p.die=function() {
+        this.dx=0;
+        this.dy=this.JUMP_SPEED;
+        this.dead=true;
+    }
+    p.render=function(ctx) {
+        ctx.fillStyle="#00f";
+        ctx.fillRect(this.rect.x,this.rect.y,this.rect.w,this.rect.h);
     }
     return p;
 }

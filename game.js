@@ -9,6 +9,7 @@ var levelTile_ctx;
 var white="#fff";
 var black="#000";
 var gold="#ffd700";
+var red="#f00";
 var pantoneFont="bold 15px sans-serif";
 
 var resetCounter=0;
@@ -19,11 +20,13 @@ var level={};
 var levelNum=0;
 var loading=false;
 
+var debug=false;
+
 var levelEndAnim=0;
 var levelEndAnimDisplayed=false;
 var waitCounter=0;
 
-var solid=[false,true,true];
+var solid=[false,true,true,true];
 
 var init=function() {
     var canvas=document.getElementById("canvas");
@@ -92,6 +95,10 @@ var loadLevel=function(id,callback) {
                         renderPantone(bg_ctx,black,result.specialText[textId][0],result.specialText[textId][1],x*100,y*140,100,140);
                         textId++;
                         break;
+                    case 'l':
+                        level.grid[x].push(3);
+                        renderPantone(bg_ctx,red,"LAVA RED","",x*100,y*140,100,140);
+                        break;
                 }
                 
             }
@@ -132,6 +139,9 @@ var update=function() {
     }
     for (var i=0; i<level.entities.length; i++) {
         level.entities[i].update();
+        if (p.dead) {
+            break;
+        }
     }
     keys[4].isPressed=false;
     if (keys[5].isDown) {
@@ -141,7 +151,7 @@ var update=function() {
             resetCounter=0;
         }
     } else {
-        resetCounter-=5;
+        resetCounter-=2;
         if (resetCounter<0){
             resetCounter=0;
         }
@@ -187,9 +197,10 @@ var render=function() {
     var center=calcCenter();
     ctx.translate(window.innerWidth/2-center.x,window.innerHeight/2-center.y);
     ctx.drawImage(bg_canvas,0,0);
-    for (var i=0; i<level.entities.length; i++) {
+    for (var i=1; i<level.entities.length; i++) {
         level.entities[i].render(ctx);
     }
+    p.render(ctx);
     ctx.translate(center.x-window.innerWidth/2,center.y-window.innerHeight/2);
     if (resetCounter>0) {
         ctx.fillStyle=white;
