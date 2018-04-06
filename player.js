@@ -94,7 +94,7 @@ var player=function(x,y) {
             }
         }
         for (var i=1; i<level.entities.length; i++) {
-            if (level.entities[i].rect.intersects(this.rect)) {
+            if (level.entities[i].isSolid&&level.entities[i].rect.intersects(this.rect)) {
                 switch(level.entities[i].rect.getEjectDir(this.rect)) {
                     case 0:
                         if (this.rect.getHorizOverlap(level.entities[i].rect)>5) {

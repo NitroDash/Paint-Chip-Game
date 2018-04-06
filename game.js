@@ -27,7 +27,7 @@ var levelEndAnim=0;
 var levelEndAnimDisplayed=false;
 var waitCounter=0;
 
-var solid=[false,true,true,true,true];
+var solid=[false,true,true,true,true,true];
 
 var init=function() {
     debug=false;
@@ -66,6 +66,7 @@ var loadLevel=function(id,callback) {
         bg_canvas.width=result.grid[0].length*100;
         bg_canvas.height=result.grid.length*140;
         level.grid=[];
+        level.powered=[];
         level.entities=[];
         var textId=0;
         for (var x=0; x<result.grid[0].length; x++) {
@@ -105,14 +106,43 @@ var loadLevel=function(id,callback) {
                         level.grid[x].push(4);
                         renderPantone(bg_ctx,spring,"SPRING","GREEN",x*100,y*140,100,140);
                         break;
+                    case 'w':
+                        level.grid[x].push(5);
+                        renderPantone(bg_ctx,rBlockColor,"WIRE GRAY","",x*100,y*140,100,140);
+                        break;
+                    case 'b':
+                        level.grid[x].push(5);
+                        level.entities.push(battery(x*100,y*140));
+                        break;
+                    case 'd':
+                        level.grid[x].push(0);
+                        level.entities.push(door(x*100,y*140,false));
+                        break;
                 }
                 
             }
         }
         level.width=level.grid.length;
         level.height=level.grid[0].length;
+        for (var x=0; x<level.width; x++) {
+            level.powered.push([]);
+            for (var y=0; y<level.height; y++) {
+                level.powered[x].push(false);
+            }
+        }
         callback();
     });
+}
+
+var clearPoweredTiles=function() {
+    for (var x=0; x<level.width; x++) {
+        for (var y=0; y<level.height; y++) {
+            level.powered[x][y]=false;
+        }
+    }
+    for (var i=0; i<level.entities.length; i++) {
+        level.entities[i].powered=false;
+    }
 }
 
 var gameLoop=function() {
@@ -143,6 +173,7 @@ var update=function() {
         }
         return;
     }
+    clearPoweredTiles();
     for (var i=0; i<level.entities.length; i++) {
         level.entities[i].update();
         if (p.dead) {
@@ -203,10 +234,17 @@ var render=function() {
     var center=calcCenter();
     ctx.translate(window.innerWidth/2-center.x,window.innerHeight/2-center.y);
     ctx.drawImage(bg_canvas,0,0);
-    for (var i=1; i<level.entities.length; i++) {
+    ctx.fillStyle=poweredColor;
+    for (var x=0; x<level.width; x++) {
+        for (var y=0; y<level.height; y++) {
+            if (level.powered[x][y]) {
+                ctx.fillRect(x*100+1,y*140+1,98,98);
+            }
+        }
+    }
+    for (var i=level.entities.length-1; i>=0; i--) {
         level.entities[i].render(ctx);
     }
-    p.render(ctx);
     ctx.translate(center.x-window.innerWidth/2,center.y-window.innerHeight/2);
     if (resetCounter>0) {
         ctx.fillStyle=white;

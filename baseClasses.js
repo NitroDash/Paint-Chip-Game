@@ -56,5 +56,8 @@ var rect=function(x,y,w,h) {
     r.getVertOverlap=function(other) {
         return Math.max(Math.min(this.getBottom(),other.getBottom())-Math.max(this.y,other.y),0);
     }
+    r.intersectsWithinThreshold=function(other,thresh) {
+        return (this.getRight()>=other.x-thresh&&other.getRight()>=this.x-thresh&&this.getBottom()>=other.y-thresh&&other.getBottom()>=this.y-thresh);
+    }
     return r;
 }

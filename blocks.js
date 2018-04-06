@@ -2,6 +2,8 @@ var rBlockColor="#888";
 var rBlockText1="CART GRAY";
 var rBlockText2="";
 
+var poweredColor="#53f442";
+
 var rollingBlock=function(x,y) {
     var r=entity(x,y,100,140);
     r.dx=0;
@@ -39,6 +41,25 @@ var rollingBlock=function(x,y) {
                             this.dx=avgDx;
                             level.entities[i].dx=avgDx;
                             level.entities[i].isPushed=true;
+                        }
+                        break;
+                }
+            } else if (level.entities[i].isSolid&&level.entities[i]!=this&&level.entities[i].rect.intersects(this.rect)) {
+                switch(level.entities[i].rect.eject(this.rect)) {
+                    case 0:
+                        this.hitFloor();
+                        break;
+                    case 1:
+                        this.dy=(this.dy>0)?this.dy:0;
+                        break;
+                    case 2:
+                        if (this.dx>0) {
+                            this.dx=0;
+                        }
+                        break;
+                    case 3:
+                        if (this.dx<0) {
+                            this.dx=0;
                         }
                         break;
                 }
@@ -129,7 +150,7 @@ var rollingBlock=function(x,y) {
         this.isPushed=false;
     }
     r.render=function(ctx) {
-        renderPantone(ctx,rBlockColor,rBlockText1,rBlockText2,this.rect.x,this.rect.y,100,120);
+        renderPantone(ctx,this.powered?poweredColor:rBlockColor,rBlockText1,rBlockText2,this.rect.x,this.rect.y,100,120);
         ctx.fillStyle=black;
         this.fillWheel(ctx,this.rect.x+15,this.rect.getBottom()-10);
         this.fillWheel(ctx,this.rect.getRight()-15,this.rect.getBottom()-10);
@@ -147,4 +168,71 @@ var rollingBlock=function(x,y) {
     }
     r.canBePushed=true;
     return r;
+}
+
+var spreadPower=function(x,y) {
+    if (level.grid[x]&&level.grid[x][y]==5&&!level.powered[x][y]) {
+        level.powered[x][y]=true;
+        spreadPower(x-1,y);
+        spreadPower(x+1,y);
+        spreadPower(x,y-1);
+        spreadPower(x,y+1);
+        tileRect.x=x*100;
+        tileRect.y=y*100;
+        for (var i=1; i<level.entities.length; i++) {
+            if (!level.entities[i].powered&&level.entities[i].rect.intersects(tileRect)) {
+                spreadPowerEntity(level.entities[i]);
+            }
+        }
+    }
+}
+
+var spreadPowerEntity=function(e) {
+    e.powered=true;
+    for (var i=1; i<level.entities.length; i++) {
+        if (!level.entities[i].powered&&level.entities[i].rect.intersectsWithinThreshold(e.rect,5)) {
+            spreadPowerEntity(level.entities[i]);
+        }
+    }
+    for (var x=Math.floor(e.rect.x/100); x<=Math.floor(e.rect.getRight()/100); x++) {
+        for (var y=Math.floor(e.rect.y/140); y<=Math.floor(e.rect.getBottom()/140); y++) {
+            spreadPower(x,y);
+        }
+    }
+}
+
+var battery=function(x,y) {
+    var b=entity(x,y,100,140);
+    b.isSolid=true;
+    b.update=function() {
+        this.powered=true;
+        spreadPowerEntity(this);
+    }
+    b.render=function(ctx) {
+        renderPantone(ctx,poweredColor,"BATTERY","GREEN",this.rect.x,this.rect.y,this.rect.w,this.rect.h);
+    }
+    return b;
+}
+
+var door=function(x,y,isOpen) {
+    var d=entity(x,y,100,140);
+    d.defaultOpen=isOpen;
+    d.isSolid=!isOpen;
+    d.update=function() {
+        this.isSolid=!this.isOpen();
+        if (this.isSolid&&p.rect.intersects(this.rect)) {
+            this.rect.eject(p.rect);
+        }
+    }
+    d.isOpen=function() {
+        return d.defaultOpen!=d.powered;
+    }
+    d.render=function(ctx) {
+        if (this.isSolid) {
+            renderPantone(ctx,black,"CLOSED","DOOR",this.rect.x,this.rect.y,this.rect.w,this.rect.h);
+        } else {
+            renderPantone(ctx,white,"OPEN","DOOR",this.rect.x,this.rect.y,this.rect.w,this.rect.h);
+        }
+    }
+    return d;
 }
