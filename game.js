@@ -112,7 +112,11 @@ var loadLevel=function(id,callback) {
                         break;
                     case 'b':
                         level.grid[x].push(5);
-                        level.entities.push(battery(x*100,y*140));
+                        if (level.entities.length<2) {
+                            level.entities.push(battery(x*100,y*140));
+                        } else {
+                            level.entities.splice(1,0,battery(x*100,y*140));
+                        }
                         break;
                     case 'd':
                         level.grid[x].push(0);
@@ -215,15 +219,15 @@ var getRandomRGB=function() {
 
 var calcCenter=function() {
     var c={};
-    if (level.grid.length*100<=window.innerWidth) {
-        c.x=level.grid.length*50;
+    if (level.width*100<=window.innerWidth) {
+        c.x=level.width*50;
     } else {
-        c.x=Math.max(Math.min(p.rect.getCenterX(),level.grid.length*100-window.innerWidth/2),window.innerWidth/2);
+        c.x=Math.max(Math.min(p.camera.x,level.width*100-window.innerWidth/2),window.innerWidth/2);
     }
-    if (level.grid[0].length*140<=window.innerHeight) {
-        c.y=level.grid[0].length*70;
+    if (level.height*140<=window.innerHeight) {
+        c.y=level.height*70;
     } else {
-        c.y=Math.max(Math.min(p.rect.getCenterY(),level.grid[0].length*140-window.innerHeight/2),window.innerHeight/2);
+        c.y=Math.max(Math.min(p.camera.y,level.height*140-window.innerHeight/2),window.innerHeight/2);
     }
     return c;
 }

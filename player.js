@@ -6,7 +6,7 @@ var entity=function(x,y,w,h) {
     return e;
 }
 
-var keys=[keyGroup(38,87),keyGroup(40,83),keyGroup(65,37),keyGroup(39,68),keyboard(32),keyboard(82),keyboard(78)];
+var keys=[keyGroup(38,87),keyGroup(40,83),keyGroup(65,37),keyGroup(39,68),keyboard(32),keyboard(82),keyboard(78),keyboard(16)];
 
 var tileRect=rect(0,0,100,140);
 
@@ -21,6 +21,7 @@ var player=function(x,y) {
     p.endLevelAnim=false;
     p.endLevelAnimCounter=0;
     p.dead=false;
+    p.camera={"x":p.rect.getCenterX(),"y":p.rect.getCenterY()};
     p.update=function() {
         if (this.dead) {
             this.dy+=this.GRAVITY;
@@ -49,19 +50,40 @@ var player=function(x,y) {
             }
             return;
         }
-        if (keys[2].isDown()) {
-            this.dx=-this.WALK_SPEED;
-        } else if (keys[3].isDown()) {
-            this.dx=this.WALK_SPEED;
-        } else {
-            this.dx=0;
-        }
-        if (this.grounded) {
-            if (keys[4].isPressed) {
-                this.dy=this.JUMP_SPEED;
+        if (keys[7].isDown) {
+            if (keys[0].isDown()) {
+                this.camera.y-=this.WALK_SPEED;
             }
+            if (keys[1].isDown()) {
+                this.camera.y+=this.WALK_SPEED;
+            }
+            if (keys[2].isDown()) {
+                this.camera.x-=this.WALK_SPEED;
+            }
+            if (keys[3].isDown()) {
+                this.camera.x+=this.WALK_SPEED;
+            }
+            this.camera.x=Math.max(Math.min(this.camera.x,level.width*100-window.innerWidth/2),window.innerWidth/2);
+            this.camera.y=Math.max(Math.min(this.camera.y,level.height*140-window.innerHeight/2),window.innerHeight/2);
+            if (!this.grounded) {
+                this.dy+=this.GRAVITY;
+            }
+            this.dx=0;
         } else {
-            this.dy+=this.GRAVITY;
+            if (keys[2].isDown()) {
+                this.dx=-this.WALK_SPEED;
+            } else if (keys[3].isDown()) {
+                this.dx=this.WALK_SPEED;
+            } else {
+                this.dx=0;
+            }
+            if (this.grounded) {
+                if (keys[4].isPressed) {
+                    this.dy=this.JUMP_SPEED;
+                }
+            } else {
+                this.dy+=this.GRAVITY;
+            }
         }
         this.rect.translate(this.dx,this.dy);
         this.grounded=false;
@@ -106,6 +128,10 @@ var player=function(x,y) {
         }
         if (keys[6].isDown&&debug) {
             startLevelLoad(1,0);
+        }
+        if (!keys[7].isDown) {
+            this.camera.x=this.rect.getCenterX();
+            this.camera.y=this.rect.getCenterY();
         }
     };
     p.hitFloor=function() {

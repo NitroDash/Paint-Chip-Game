@@ -1,0 +1,13 @@
+{
+    "grid":[
+        "m           m",
+        "m   M  M    m",
+        "m p M  M    m",
+        "mmmmm tt mwdm",
+        "    m     w m",
+        "    b ww wwgm",
+        "    m mm m   ",
+        "    msmmsm   "
+    ],
+    "specialText":[["HOLD","SHIFT"],["TO MOVE","CAMERA"]]
+}
