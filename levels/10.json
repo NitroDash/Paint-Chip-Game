@@ -1,0 +1,16 @@
+{
+    "grid": [
+        "m       D       D       D m",
+        "m       D       D       D m",
+        "mpMM MM D MM MM D MM MM D m",
+        "mmmm mmmwmmm mmmwmmm mmmw m",
+        "   m mwww  m mwww  m mwww m",
+        "   m mw    m mw    m mw m m",
+        "   m mw    m mw    m mw wdm",
+        "   m ww    m mw    m ww w m",
+        " bww m     m ww wwww m  wgm",
+        "   m wwwwwww m  w  m wwww  ",
+        "   m m     m wwww  m m     ",
+        "   mmm     mmm     mmm     "
+    ]
+}

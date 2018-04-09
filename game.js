@@ -11,7 +11,9 @@ var black="#000";
 var gold="#ffd700";
 var red="#f00";
 var spring="#00ff7f";
+var pauseBlack="rgba(0,0,0,0.5)";
 var pantoneFont="bold 15px sans-serif";
+var pauseFont="bold 30px sans-serif";
 
 var resetCounter=0;
 
@@ -20,6 +22,11 @@ var p={};
 var level={};
 var levelNum=0;
 var loading=false;
+
+var paused=false;
+var pauseMenuSpot=0;
+
+var pausedMenuOptions=["Resume","Restart"];
 
 var debug=false;
 
@@ -122,6 +129,10 @@ var loadLevel=function(id,callback) {
                         level.grid[x].push(0);
                         level.entities.push(door(x*100,y*140,false));
                         break;
+                    case 'D':
+                        level.grid[x].push(0);
+                        level.entities.push(door(x*100,y*140,true));
+                        break;
                 }
                 
             }
@@ -177,25 +188,57 @@ var update=function() {
         }
         return;
     }
-    clearPoweredTiles();
-    for (var i=0; i<level.entities.length; i++) {
-        level.entities[i].update();
-        if (p.dead) {
-            break;
-        }
+    if (keys[8].isPressed) {
+        paused=!paused;
+        pauseMenuSpot=0;
     }
-    keys[4].isPressed=false;
-    if (keys[5].isDown) {
-        resetCounter+=1;
-        if (resetCounter>=50) {
-            startLevelLoad(0,0);
-            resetCounter=0;
+    if (paused) {
+        if (keys[0].isPressed()) {
+            pauseMenuSpot--;
+            if (pauseMenuSpot<0) {
+                pauseMenuSpot=pausedMenuOptions.length-1;
+            }
+        }
+        if (keys[1].isPressed()) {
+            pauseMenuSpot++;
+            if (pauseMenuSpot>=pausedMenuOptions.length) {
+                pauseMenuSpot=0;
+            }
+        }
+        if (keys[4].isPressed) {
+            switch (pauseMenuSpot) {
+                case 0:
+                    paused=false;
+                    break;
+                case 1:
+                    startLevelLoad(0,0);
+                    paused=false;
+                    break;
+            }
         }
     } else {
-        resetCounter-=2;
-        if (resetCounter<0){
-            resetCounter=0;
+        clearPoweredTiles();
+        for (var i=0; i<level.entities.length; i++) {
+            level.entities[i].update();
+            if (p.dead) {
+                break;
+            }
         }
+        if (keys[5].isDown) {
+            resetCounter++;
+            if (resetCounter>=50) {
+                startLevelLoad(0,0);
+                resetCounter=0;
+            }
+        } else {
+            resetCounter-=2;
+            if (resetCounter<0){
+                resetCounter=0;
+            }
+        }
+    }
+    for (var i=0; i<keys.length; i++) {
+        keys[i].resetPress();
     }
 }
 
@@ -267,6 +310,29 @@ var render=function() {
                 ctx.drawImage(levelTile_canvas,x,y);
             }
         }
+    }
+    if (paused) {
+        ctx.fillStyle=pauseBlack;
+        ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
+        ctx.font=pauseFont;
+        ctx.textAlign="center";
+        ctx.textBaseline="middle";
+        var centerX=window.innerWidth/2;
+        var centerY=window.innerHeight/2-20*pausedMenuOptions.length;
+        ctx.fillStyle=white;
+        ctx.fillRect(0,centerY+pauseMenuSpot*40-18,window.innerWidth,36);
+        ctx.fillText("PAUSED",centerX,20);
+        ctx.fillText("Press space to select",centerX,window.innerHeight-20);
+        for (var i=0; i<pausedMenuOptions.length; i++) {
+            if (i==pauseMenuSpot) {
+                ctx.fillStyle=black;
+            } else {
+                ctx.fillStyle=white;
+            }
+            ctx.fillText(pausedMenuOptions[i],centerX,centerY+40*i);
+        }
+        ctx.textAlign="left";
+        ctx.textBaseline="bottom";
     }
 }
 

@@ -6,7 +6,7 @@ var entity=function(x,y,w,h) {
     return e;
 }
 
-var keys=[keyGroup(38,87),keyGroup(40,83),keyGroup(65,37),keyGroup(39,68),keyboard(32),keyboard(82),keyboard(78),keyboard(16)];
+var keys=[keyGroup(38,87),keyGroup(40,83),keyGroup(65,37),keyGroup(39,68),keyboard(32),keyboard(82),keyboard(78),keyboard(16),keyboard(27)];
 
 var tileRect=rect(0,0,100,140);
 

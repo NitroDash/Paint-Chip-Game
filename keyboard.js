@@ -29,6 +29,10 @@ function keyboard(keyCode) {
     }
     event.preventDefault();
   };
+    
+    key.resetPress=function() {
+        this.isPressed=false;
+    }
 
   //Attach event listeners
   window.addEventListener(
@@ -45,13 +49,17 @@ function keyGroup(key1,key2) {
     key.one=keyboard(key1);
     key.two=keyboard(key2);
     key.isDown=function() {
-        return (key.one.isDown||key.two.isDown);
+        return (this.one.isDown||this.two.isDown);
     }
     key.isPressed=function() {
-        return (key.one.isPressed||key.two.isPressed);
+        return (this.one.isPressed||this.two.isPressed);
     }
     key.isUp=function() {
-        return !key.isDown();
+        return !this.isDown();
+    }
+    key.resetPress=function() {
+        this.one.resetPress();
+        this.two.resetPress();
     }
     return key;
 }

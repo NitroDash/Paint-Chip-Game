@@ -180,7 +180,7 @@ var spreadPower=function(x,y) {
         tileRect.x=x*100;
         tileRect.y=y*140;
         for (var i=1; i<level.entities.length; i++) {
-            if (!level.entities[i].powered&&level.entities[i].rect.intersectsWithinThreshold(tileRect,2)) {
+            if (!level.entities[i].powered&&level.entities[i].rect.intersectsWithinThreshold(tileRect,2,0)) {
                 spreadPowerEntity(level.entities[i]);
                 tileRect.x=x*100;
                 tileRect.y=y*140;
@@ -192,13 +192,17 @@ var spreadPower=function(x,y) {
 var spreadPowerEntity=function(e) {
     e.powered=true;
     for (var i=1; i<level.entities.length; i++) {
-        if (!level.entities[i].powered&&level.entities[i].rect.intersectsWithinThreshold(e.rect,5)) {
+        if (!level.entities[i].powered&&level.entities[i].rect.intersectsWithinThreshold(e.rect,5,0)) {
             spreadPowerEntity(level.entities[i]);
         }
     }
     for (var x=Math.floor(e.rect.x/100)-1; x<=Math.floor(e.rect.getRight()/100); x++) {
         for (var y=Math.floor(e.rect.y/140)-1; y<=Math.floor(e.rect.getBottom()/140); y++) {
-            spreadPower(x,y);
+            tileRect.x=x*100;
+            tileRect.y=y*140;
+            if (tileRect.intersectsWithinThreshold(e.rect,2,0)) {
+                spreadPower(x,y);
+            }
         }
     }
 }
