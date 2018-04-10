@@ -27,13 +27,17 @@ var paused=false;
 var pauseMenu=0;
 var pauseMenuSpot=0;
 
-var pausedMenuOptions=[["Resume","Restart","Options","Controls"],["Back"],["Back","Arrow keys/WASD: Move","Space: Jump","R: Hold to reset","Shift: Hold to pan camera","Escape: Pause"]];
+var pausedMenuOptions=[["Resume","Restart","Options","Controls","Restart Game"],["Back","Speedrun timer: Off"],["Back","Arrow keys/WASD: Move","Space: Jump","R: Hold to reset","Shift: Hold to pan camera","Escape: Pause"],["Are you sure? All progress will be lost","Yes","No"]];
 
 var debug=false;
 
 var levelEndAnim=0;
 var levelEndAnimDisplayed=false;
 var waitCounter=0;
+
+var speedTimer=0;
+var startTime=0;
+var timerShown=false;
 
 var solid=[false,true,true,true,true,true];
 
@@ -53,7 +57,10 @@ var init=function() {
     levelTile_canvas.width=100;
     levelTile_canvas.height=140;
     levelTile_ctx=levelTile_canvas.getContext("2d");
-    loadLevel(levelNum,gameLoop);
+    loadLevel(levelNum,function() {
+        startSegment();
+        gameLoop();
+    });
 }
 
 var containsSolidGround=function(x,y) {
@@ -186,6 +193,7 @@ var update=function() {
         if (levelEndAnim<-ctx.canvas.height/2) {
             levelEndAnim=0;
             levelEndAnimDisplayed=false;
+            startSegment();
         }
         return;
     }
@@ -226,6 +234,10 @@ var update=function() {
                             pauseMenu=2;
                             pauseMenuSpot=0;
                             break;
+                        case 4:
+                            pauseMenu=3;
+                            pauseMenuSpot=2;
+                            break;
                     } 
                     break;
                 case 1:
@@ -233,6 +245,10 @@ var update=function() {
                         case 0:
                             pauseMenu=0;
                             pauseMenuSpot=2;
+                            break;
+                        case 1:
+                            pausedMenuOptions[1][1]=(timerShown)?"Speedrun timer: Off":"Speedrun timer: On";
+                            timerShown=!timerShown;
                             break;
                     }
                     break;
@@ -243,6 +259,20 @@ var update=function() {
                             pauseMenuSpot=3;
                             break;
                     }
+                    break;
+                case 3:
+                    switch (pauseMenuSpot) {
+                        case 1:
+                            paused=false;
+                            startLevelLoad(-levelNum,0);
+                            speedTimer=0;
+                            break;
+                        case 2:
+                            pauseMenu=0;
+                            pauseMenuSpot=0;
+                            break;
+                    }
+                    break;
             }
         }
     } else {
@@ -277,6 +307,44 @@ var startLevelLoad=function(levelsIncremented,delay) {
     levelEndAnimDisplayed=true;
     levelNum+=levelsIncremented;
     renderPantone(levelTile_ctx,getRandomRGB(),"LEVEL "+(levelNum+1),"",0,0,100,140);
+    endSegment();
+}
+
+var startSegment=function() {
+    startTime=new Date().getTime();
+}
+
+var endSegment=function() {
+    speedTimer+=new Date().getTime()-startTime;
+}
+
+var getTimer=function() {
+    return speedTimer+new Date().getTime()-startTime;
+}
+
+var zeroPad=function(num,digits) {
+    var s=""+num;
+    while (s.length<digits) {
+        s="0"+s;
+    }
+    return s;
+}
+
+var formatTimer=function() {
+    var t=getTimer();
+    var s="";
+    if (t>=3600000) {
+        s+=Math.floor(t/3600000)+":";
+        t=t%3600000;
+    }
+    s+=zeroPad(Math.floor(t/60000),2);
+    s+=":";
+    t=t%60000;
+    s+=zeroPad(Math.floor(t/1000),2);
+    s+=".";
+    t=t%1000;
+    s+=zeroPad(t,3);
+    return s;
 }
 
 var RGBChars=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'];
@@ -339,6 +407,12 @@ var render=function() {
                 ctx.drawImage(levelTile_canvas,x,y);
             }
         }
+    } else if (timerShown&&!paused) {
+        ctx.font=pauseFont;
+        ctx.fillStyle=white;
+        ctx.fillRect(window.innerWidth-154,2,150,36);
+        ctx.fillStyle=black;
+        ctx.fillText(formatTimer(),window.innerWidth-151,30);
     }
     if (paused) {
         ctx.fillStyle=pauseBlack;
@@ -361,7 +435,11 @@ var render=function() {
             ctx.fillText(pausedMenuOptions[pauseMenu][i],centerX,centerY+40*i);
         }
         ctx.textAlign="left";
-        ctx.textBaseline="bottom";
+        ctx.textBaseline="alphabetic";
+        if (timerShown) {
+            ctx.fillStyle=white;
+            ctx.fillText(formatTimer(),window.innerWidth-151,30);
+        }
     }
 }
 
