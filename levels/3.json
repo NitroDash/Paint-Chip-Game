@@ -3,6 +3,7 @@
         "m          m",
         "m      m   m",
         "m p    m   m",
-        "mmmmmmsmmmgm"
-    ]
+        "mmmmttsmmmgm"
+    ],
+    "specialText":[["PRESS","ESCAPE"],["TO PAUSE",""]]
 }

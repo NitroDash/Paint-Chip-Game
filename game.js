@@ -24,9 +24,10 @@ var levelNum=0;
 var loading=false;
 
 var paused=false;
+var pauseMenu=0;
 var pauseMenuSpot=0;
 
-var pausedMenuOptions=["Resume","Restart"];
+var pausedMenuOptions=[["Resume","Restart","Options","Controls"],["Back"],["Back","Arrow keys/WASD: Move","Space: Jump","R: Hold to reset","Shift: Hold to pan camera","Escape: Pause"]];
 
 var debug=false;
 
@@ -191,29 +192,57 @@ var update=function() {
     if (keys[8].isPressed) {
         paused=!paused;
         pauseMenuSpot=0;
+        pauseMenu=0;
     }
     if (paused) {
         if (keys[0].isPressed()) {
             pauseMenuSpot--;
             if (pauseMenuSpot<0) {
-                pauseMenuSpot=pausedMenuOptions.length-1;
+                pauseMenuSpot=pausedMenuOptions[pauseMenu].length-1;
             }
         }
         if (keys[1].isPressed()) {
             pauseMenuSpot++;
-            if (pauseMenuSpot>=pausedMenuOptions.length) {
+            if (pauseMenuSpot>=pausedMenuOptions[pauseMenu].length) {
                 pauseMenuSpot=0;
             }
         }
         if (keys[4].isPressed) {
-            switch (pauseMenuSpot) {
+            switch (pauseMenu) {
                 case 0:
-                    paused=false;
+                    switch (pauseMenuSpot) {
+                        case 0:
+                            paused=false;
+                            break;
+                        case 1:
+                            startLevelLoad(0,0);
+                            paused=false;
+                            break;
+                        case 2:
+                            pauseMenu=1;
+                            pauseMenuSpot=0;
+                            break;
+                        case 3:
+                            pauseMenu=2;
+                            pauseMenuSpot=0;
+                            break;
+                    } 
                     break;
                 case 1:
-                    startLevelLoad(0,0);
-                    paused=false;
+                    switch (pauseMenuSpot) {
+                        case 0:
+                            pauseMenu=0;
+                            pauseMenuSpot=2;
+                            break;
+                    }
                     break;
+                case 2:
+                    switch (pauseMenuSpot) {
+                        case 0:
+                            pauseMenu=0;
+                            pauseMenuSpot=3;
+                            break;
+                    }
             }
         }
     } else {
@@ -318,18 +347,18 @@ var render=function() {
         ctx.textAlign="center";
         ctx.textBaseline="middle";
         var centerX=window.innerWidth/2;
-        var centerY=window.innerHeight/2-20*pausedMenuOptions.length;
+        var centerY=window.innerHeight/2-20*pausedMenuOptions[pauseMenu].length;
         ctx.fillStyle=white;
         ctx.fillRect(0,centerY+pauseMenuSpot*40-18,window.innerWidth,36);
         ctx.fillText("PAUSED",centerX,20);
         ctx.fillText("Press space to select",centerX,window.innerHeight-20);
-        for (var i=0; i<pausedMenuOptions.length; i++) {
+        for (var i=0; i<pausedMenuOptions[pauseMenu].length; i++) {
             if (i==pauseMenuSpot) {
                 ctx.fillStyle=black;
             } else {
                 ctx.fillStyle=white;
             }
-            ctx.fillText(pausedMenuOptions[i],centerX,centerY+40*i);
+            ctx.fillText(pausedMenuOptions[pauseMenu][i],centerX,centerY+40*i);
         }
         ctx.textAlign="left";
         ctx.textBaseline="bottom";
