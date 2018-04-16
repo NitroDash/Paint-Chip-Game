@@ -17,7 +17,7 @@ var player=function(x,y) {
     p.WALK_SPEED=4;
     p.JUMP_SPEED=-13;
     p.GRAVITY=0.48;
-    p.grounded=true;82
+    p.grounded=true;
     p.endLevelAnim=false;
     p.endLevelAnimCounter=0;
     p.dead=false;
@@ -122,6 +122,9 @@ var player=function(x,y) {
                         if (this.rect.getHorizOverlap(level.entities[i].rect)>5) {
                             this.hitFloor();
                         }
+                        break;
+                    case 1:
+                        this.hitCeiling();
                         break;
                 }
             }

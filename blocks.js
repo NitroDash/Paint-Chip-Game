@@ -25,7 +25,7 @@ var rollingBlock=function(x,y) {
                             receivedBoost=true;
                             if (!solid[level.grid[Math.floor((this.rect.getCenterX()+((level.entities[i].dx>0)?this.rect.w/2:-this.rect.w/2))/100)][Math.floor(this.rect.getCenterY()/140)]]) {
                                 for (var j=0; j<level.entities.length; j++) {
-                                    if (level.entities[j].rect.intersects(this.rect)&&level.entities[j].rect.getBottom()==this.rect.y&&!level.entities[j].receivedBoost) {
+                                    if (level.entities[j].canBePushed&&level.entities[j].rect.intersects(this.rect)&&level.entities[j].rect.getBottom()==this.rect.y&&!level.entities[j].receivedBoost) {
                                         level.entities[j].rect.translate(level.entities[i].dx,level.entities[i].dy);
                                     }
                                 }

@@ -42,7 +42,10 @@ var rect=function(x,y,w,h) {
         var horiz=(other.getCenterX()>this.getCenterX())?this.getRight()-other.x:this.x-other.getRight();
         var vert=(other.getCenterY()>this.getCenterY())?this.getBottom()-other.y:this.y-other.getBottom();
         if (Math.abs(horiz)>Math.abs(vert)) {
-            return (vert<=0)?0:1;
+            if (vert==0) {
+                return (other.getCenterY()>this.getCenterY())?1:0;
+            }
+            return (vert<0)?0:1;
         } else {
             return (horiz<=0)?2:3;
         }

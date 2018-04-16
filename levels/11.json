@@ -1,13 +1,12 @@
 {
     "grid":[
-        "m                 m",
-        "m                 m",
-        "m         g       m",
-        "m        D        m",
-        "m      mmwmm      m",
-        "m    M   M   M    m",
-        "m  mmmmmmwmmmmm   m",
-        "m p      M        m",
-        "mmmmmmmmmbmmmmmmmmm"
+        "m       M M      m",
+        "m       M M      m",
+        "m      wd dw     m",
+        "m   gwww   wwww  m",
+        "m    w           m",
+        "m    w           m",
+        "m p    M M       m",
+        "mmmmmbmmmmmbmmmmmm"
     ]
 }
