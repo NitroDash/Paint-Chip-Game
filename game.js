@@ -20,7 +20,7 @@ var resetCounter=0;
 var p={};
 
 var level={};
-var levelNum=9;
+var levelNum=0;
 var loading=false;
 
 var paused=false;

@@ -92,12 +92,12 @@ var player=function(x,y) {
                 if (solid[level.grid[x][y]]) {
                     tileRect.x=x*100;
                     tileRect.y=y*140;
-                    if (level.grid[x][y]==3&&(Math.floor(this.rect.getCenterY()/140)==y||(Math.floor(this.rect.getCenterX()/100)==x))) {
-                        this.die();
-                        return;
-                    }
                     switch(tileRect.eject(this.rect)) {
                         case 0:
+                            if (level.grid[x][y]==3&&(Math.floor(this.rect.getCenterY()/140)==y||(Math.floor(this.rect.getCenterX()/100)==x))) {
+                                this.die();
+                                return;
+                            }
                             this.hitFloor();
                             if (level.grid[x][y]==2&&tileRect.contains(this.rect.getCenterX(),this.rect.getBottom()+1)) {
                                 this.endLevelAnim=true;
