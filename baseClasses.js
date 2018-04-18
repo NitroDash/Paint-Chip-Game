@@ -35,7 +35,10 @@ var rect=function(x,y,w,h) {
             }
         } else {
             other.translate(horiz,0);
-            return (horiz<=0)?2:3;
+            if (horiz==0) {
+                return (other.getCenterX()>this.getCenterX())?3:2;
+            }
+            return (horiz<0)?2:3;
         }
     }
     r.getEjectDir=function(other) {
@@ -47,7 +50,10 @@ var rect=function(x,y,w,h) {
             }
             return (vert<0)?0:1;
         } else {
-            return (horiz<=0)?2:3;
+            if (horiz==0) {
+                return (other.getCenterX()>this.getCenterX())?3:2;
+            }
+            return (horiz<0)?2:3;
         }
     }
     r.contains=function(x,y) {
