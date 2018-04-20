@@ -83,6 +83,11 @@ var loadLevel=function(id,callback) {
         level.grid=[];
         level.powered=[];
         level.entities=[];
+        if (result.last) {
+            level.last=true;
+        } else {
+            level.last=false;
+        }
         var textId=0;
         for (var x=0; x<result.grid[0].length; x++) {
             level.grid.push([]);
@@ -315,10 +320,15 @@ var startSegment=function() {
 }
 
 var endSegment=function() {
-    speedTimer+=new Date().getTime()-startTime;
+    if (!level.last) {
+        speedTimer+=new Date().getTime()-startTime;
+    }
 }
 
 var getTimer=function() {
+    if (level.last) {
+        return speedTimer;
+    }
     return speedTimer+new Date().getTime()-startTime;
 }
 
