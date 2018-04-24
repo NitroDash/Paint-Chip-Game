@@ -11,6 +11,7 @@ var black="#000";
 var gold="#ffd700";
 var red="#f00";
 var spring="#00ff7f";
+var clear="rgba(0,0,0,0)";
 var pauseBlack="rgba(0,0,0,0.5)";
 var pantoneFont="bold 15px sans-serif";
 var pauseFont="bold 30px sans-serif";
@@ -89,6 +90,7 @@ var loadLevel=function(id,callback) {
             level.last=false;
         }
         var textId=0;
+        var playerAdded=false;
         for (var x=0; x<result.grid[0].length; x++) {
             level.grid.push([]);
             for (var y=0; y<result.grid.length; y++) {
@@ -104,6 +106,7 @@ var loadLevel=function(id,callback) {
                         level.grid[x].push(0);
                         p=player(x*100+20,y*140+40)
                         level.entities.splice(0,0,p);
+                        playerAdded=true;
                         break;
                     case 'M':
                         level.grid[x].push(0);
@@ -132,11 +135,7 @@ var loadLevel=function(id,callback) {
                         break;
                     case 'b':
                         level.grid[x].push(5);
-                        if (level.entities.length<2) {
-                            level.entities.push(battery(x*100,y*140));
-                        } else {
-                            level.entities.splice(1,0,battery(x*100,y*140));
-                        }
+                        level.entities.splice(playerAdded?1:0,0,battery(x*100,y*140));
                         break;
                     case 'd':
                         level.grid[x].push(0);
@@ -145,6 +144,10 @@ var loadLevel=function(id,callback) {
                     case 'D':
                         level.grid[x].push(0);
                         level.entities.push(door(x*100,y*140,true));
+                        break;
+                    case 'z':
+                        level.grid[x].push(1);
+                        level.entities.push(laserShooter(x*100,y*140));
                         break;
                 }
                 
@@ -456,7 +459,7 @@ var render=function() {
 var renderPantone=function(ctx,color,text1,text2,x,y,w,h) {
     ctx.font=pantoneFont;
     ctx.fillStyle=white;
-    ctx.fillRect(x,y,w,h);
+    ctx.fillRect(x,y+h-40,w,40);
     ctx.fillStyle=color;
     ctx.fillRect(x,y,w,h-40);
     ctx.fillStyle=black;
