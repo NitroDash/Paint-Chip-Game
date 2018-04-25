@@ -291,6 +291,10 @@ var update=function() {
                 break;
             }
         }
+        if (!keys[7].isDown) {
+            p.camera.x=p.rect.getCenterX();
+            p.camera.y=p.rect.getCenterY();
+        }
         if (keys[5].isDown) {
             resetCounter++;
             if (resetCounter>=50) {

@@ -132,10 +132,6 @@ var player=function(x,y) {
         if (keys[6].isDown&&debug) {
             startLevelLoad(1,0);
         }
-        if (!keys[7].isDown) {
-            this.camera.x=this.rect.getCenterX();
-            this.camera.y=this.rect.getCenterY();
-        }
     };
     p.hitFloor=function() {
         if (this.dy>=0) {
