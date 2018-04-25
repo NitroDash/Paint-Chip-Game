@@ -336,7 +336,7 @@ var vertLaser=function(x,y,dy) {
     x=Math.floor(x/100);
     for (var Y=(l.dy>0)?Math.floor(y/140):Math.floor(y/140)-1; Y>=0&&Y<level.height; Y+=l.dy) {
         if (solid[level.grid[x][Y]]) {
-            l.endY=(l.dy=0)?Y*140:(Y+1)*140;
+            l.endY=(l.dy>0)?Y*140:(Y+1)*140;
             break;
         }
     }

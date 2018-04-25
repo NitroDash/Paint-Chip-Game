@@ -1,9 +1,11 @@
 {
     "grid":[
-        "m       m",
-        "m       m",
-        "m p     m",
-        "mmmmmmmmm"
-    ],
-    "last":true
+        "m             m",
+        "m p           m",
+        "mmmmm         m",
+        "bw ww   m    gm",
+        "z   D         m",
+        "mmMmmsssssssssm",
+        " msm           "
+    ]
 }
