@@ -1,9 +1,12 @@
 {
     "grid":[
-        "m             mmm",
-        "m             mmm",
-        "mp MMM        d m",
-        "mwwwwww wwwmwwwgm",
-        "mbmmmmmmmmmmmmmmm"
+        "m         m",
+        "m         m",
+        "m  l l    m",
+        "mglmsmsl  m",
+        "m        sm",
+        "m        mm",
+        "mp l l lsmm",
+        "mmsmsmsmmmm"
     ]
 }

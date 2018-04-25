@@ -1,12 +1,13 @@
 {
     "grid":[
-        "mmM     m",
-        "mmM MMM m",
-        "mmdddddwm",
-        "m      wm",
-        "mg     wm",
-        "mm     wm",
-        "mm p M  m",
-        "mmmmmmmbm"
-    ]
+        "m           m",
+        "m   M  M    m",
+        "m p M  M    m",
+        "mmmmm tt mwdm",
+        "    m     w m",
+        "    b ww wwgm",
+        "    m mm m   ",
+        "    msmmsm   "
+    ],
+    "specialText":[["HOLD","SHIFT"],["TO MOVE","CAMERA"]]
 }
