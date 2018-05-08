@@ -70,3 +70,49 @@ var rect=function(x,y,w,h) {
     }
     return r;
 }
+
+var imgMaps=[0,1,0,2,3];
+
+var playerAnim=function(file,w,h,stepLength) {
+    var a={};
+    a.file=file;
+    a.w=w;
+    a.h=h;
+    a.stepLength=stepLength;
+    a.step=0;
+    a.counter=0;
+    a.reset=function() {
+        this.step=0;
+        this.counter=0;
+    }
+    a.advance=function() {
+        if (this.step==4) {
+            this.reset();
+        }
+        if (this.counter<=0) {
+            this.step++;
+            if (this.step>3) {
+                this.step=0;
+            }
+            this.counter=this.stepLength;
+        }
+        this.counter--;
+    }
+    a.jump=function() {
+        this.step=4;
+    }
+    a.getImgX=function() {
+        return this.w*imgMaps[this.step];
+    }
+    a.getImgY=function() {
+       return (p.dir)?0:this.h;
+    }
+    return a;
+}
+
+var anims=[
+    playerAnim("testPerson.png",60,100,8),
+    playerAnim("testPerson2.png",60,100,12)
+];
+
+var animLoaded=-1;

@@ -14,6 +14,7 @@ var player=function(x,y) {
     var p=entity(x,y,60,100);
     p.dx=0;
     p.dy=0;
+    p.dir=true;
     p.WALK_SPEED=4;
     p.JUMP_SPEED=-13;
     p.GRAVITY=0.48;
@@ -33,6 +34,7 @@ var player=function(x,y) {
             return;
         }
         if (this.endLevelAnim) {
+            anims[animLoaded].reset();
             if (this.endLevelAnimCounter<level.width+level.height-1) {
                 if (this.endLevelAnimCounter>=0) {
                     for (var y=Math.max(0,this.endLevelAnimCounter-level.width+1); y<Math.min(this.endLevelAnimCounter+1,level.height); y++) {
@@ -71,20 +73,33 @@ var player=function(x,y) {
             this.dx=0;
         } else {
             if (keys[2].isDown()) {
+                this.dir=false;
+                if (this.grounded) {
+                    anims[animLoaded].advance();
+                }
                 this.dx=-this.WALK_SPEED;
             } else if (keys[3].isDown()) {
+                this.dir=true;
+                if (this.grounded) {
+                    anims[animLoaded].advance();
+                }
                 this.dx=this.WALK_SPEED;
             } else {
+                if (this.grounded) {
+                    anims[animLoaded].reset();
+                }
                 this.dx=0;
             }
             if (this.grounded) {
                 if (keys[4].isPressed) {
+                    anims[animLoaded].jump();
                     this.dy=this.JUMP_SPEED;
                 }
             } else {
                 this.dy+=this.GRAVITY;
             }
         }
+        if (!this.grounded) {anims[animLoaded].jump();}
         this.rect.translate(this.dx,this.dy);
         this.grounded=false;
         for (var x=Math.floor(this.rect.x/100); x<=Math.floor(this.rect.getRight()/100); x++) {
@@ -148,8 +163,7 @@ var player=function(x,y) {
         this.dead=true;
     }
     p.render=function(ctx) {
-        ctx.fillStyle="#00f";
-        ctx.fillRect(this.rect.x,this.rect.y,this.rect.w,this.rect.h);
+        ctx.drawImage(textures[0],anims[animLoaded].getImgX(),anims[animLoaded].getImgY(),anims[animLoaded].w,anims[animLoaded].h,this.rect.x,this.rect.y,this.rect.w,this.rect.h);
     }
     return p;
 }

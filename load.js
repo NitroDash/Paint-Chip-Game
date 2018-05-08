@@ -3,12 +3,14 @@ var loadStatus=[];
 
 var srcs=[];
 
-var numImages=0;
+var numImages=1;
 var loaded=0;
 
 var hasSetup=0;
 
 var debug=true;
+
+var doneLoading=function() {};
 
 function load() {
     init();
@@ -42,13 +44,7 @@ function incrementLoad(id) {
         loadStatus[id]=2;
     }
     if (loaded<=0) {
-        if (hasSetup==0) {
-            hasSetup=1;
-            setupSelect();
-        } else if (hasSetup==1) {
-            hasSetup=2;
-            setup();
-        }
+        doneLoading();
     }
 }
 

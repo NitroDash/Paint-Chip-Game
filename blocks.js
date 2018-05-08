@@ -246,25 +246,31 @@ var door=function(x,y,isOpen) {
     return d;
 }
 
-var laserShooter=function(x,y) {
+var laserShooter=function(x,y,horiz,vert) {
     var l=entity(x,y,100,140);
     l.x=Math.floor(x/100);
     l.y=Math.floor(y/140);
     l.firstUpdated=false;
+    l.horiz=horiz;
+    l.vert=vert;
     l.onFirstUpdate=function() {
         this.firstUpdated=true;
         this.lasers=[];
-        if (level.grid[this.x-1]&&!solid[level.grid[this.x-1][this.y]]) {
-            this.lasers.push(horizLaser(this.rect.x,this.rect.getCenterY(),-1));
+        if (this.horiz) {
+            if (level.grid[this.x-1]&&!solid[level.grid[this.x-1][this.y]]) {
+                this.lasers.push(horizLaser(this.rect.x,this.rect.getCenterY(),-1));
+            }
+            if (level.grid[this.x+1]&&!solid[level.grid[this.x+1][this.y]]) {
+                this.lasers.push(horizLaser(this.rect.getRight(),this.rect.getCenterY(),1));
+            }
         }
-        if (level.grid[this.x+1]&&!solid[level.grid[this.x+1][this.y]]) {
-            this.lasers.push(horizLaser(this.rect.getRight(),this.rect.getCenterY(),1));
-        }
-        if (!solid[level.grid[this.x][this.y-1]]) {
-            this.lasers.push(vertLaser(this.rect.getCenterX(),this.rect.y,-1));
-        }
-        if (!solid[level.grid[this.x][this.y+1]]) {
-            this.lasers.push(vertLaser(this.rect.getCenterX(),this.rect.getBottom(),1));
+        if (this.vert) {
+            if (!solid[level.grid[this.x][this.y-1]]) {
+                this.lasers.push(vertLaser(this.rect.getCenterX(),this.rect.y,-1));
+            }
+            if (!solid[level.grid[this.x][this.y+1]]) {
+                this.lasers.push(vertLaser(this.rect.getCenterX(),this.rect.getBottom(),1));
+            }
         }
         for (var i=0; i<this.lasers.length; i++) {
             level.entities.push(this.lasers[i]);

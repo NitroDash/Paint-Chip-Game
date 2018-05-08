@@ -89,6 +89,11 @@ var loadLevel=function(id,callback) {
         } else {
             level.last=false;
         }
+        if (result.penultimate) {
+            level.pen=true;
+        } else {
+            level.pen=false;
+        }
         var textId=0;
         var playerAdded=false;
         for (var x=0; x<result.grid[0].length; x++) {
@@ -147,7 +152,11 @@ var loadLevel=function(id,callback) {
                         break;
                     case 'z':
                         level.grid[x].push(1);
-                        level.entities.push(laserShooter(x*100,y*140));
+                        level.entities.push(laserShooter(x*100,y*140,true,true));
+                        break;
+                    case '-':
+                        level.grid[x].push(1);
+                        level.entities.push(laserShooter(x*100,y*140,true,false));
                         break;
                 }
                 
@@ -161,7 +170,14 @@ var loadLevel=function(id,callback) {
                 level.powered[x].push(false);
             }
         }
-        callback();
+        if (animLoaded!=levelNum%2) {
+            animLoaded=levelNum%2;
+            textures[0]=loadImage("images/"+anims[animLoaded].file,0);
+            anims[animLoaded].reset();
+            doneLoading=callback;
+        } else {
+            callback();
+        }
     });
 }
 
@@ -205,7 +221,7 @@ var update=function() {
         }
         return;
     }
-    if (keys[8].isPressed) {
+    if (keys[8].isPressed&&!level.last) {
         paused=!paused;
         pauseMenuSpot=0;
         pauseMenu=0;
@@ -295,7 +311,7 @@ var update=function() {
             p.camera.x=p.rect.getCenterX();
             p.camera.y=p.rect.getCenterY();
         }
-        if (keys[5].isDown) {
+        if (keys[5].isDown&&!level.last) {
             resetCounter++;
             if (resetCounter>=50) {
                 startLevelLoad(0,0);
@@ -318,7 +334,11 @@ var startLevelLoad=function(levelsIncremented,delay) {
     waitCounter=delay;
     levelEndAnimDisplayed=true;
     levelNum+=levelsIncremented;
-    renderPantone(levelTile_ctx,getRandomRGB(),"LEVEL "+(levelNum+1),"",0,0,100,140);
+    if (level.pen&&levelsIncremented==1) {
+        renderPantone(levelTile_ctx,getRandomRGB(),"THE END","",0,0,100,140);
+    } else {
+        renderPantone(levelTile_ctx,getRandomRGB(),"LEVEL "+(levelNum+1),"",0,0,100,140);
+    }
     endSegment();
 }
 
