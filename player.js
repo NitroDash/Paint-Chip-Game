@@ -69,6 +69,9 @@ var player=function(x,y) {
             this.camera.y=Math.max(Math.min(this.camera.y,level.height*140-window.innerHeight/2),window.innerHeight/2);
             if (!this.grounded) {
                 this.dy+=this.GRAVITY;
+                anims[animLoaded].jump();
+            } else {
+                anims[animLoaded].reset();
             }
             this.dx=0;
         } else {

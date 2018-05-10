@@ -221,7 +221,7 @@ var update=function() {
         }
         return;
     }
-    if (keys[8].isPressed&&!level.last) {
+    if (keys[8].isPressed) {
         paused=!paused;
         pauseMenuSpot=0;
         pauseMenu=0;
