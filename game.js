@@ -28,7 +28,7 @@ var paused=false;
 var pauseMenu=0;
 var pauseMenuSpot=0;
 
-var pausedMenuOptions=[["Resume","Restart","Options","Controls","Restart Game"],["Back","Speedrun timer: Off"],["Back","Arrow keys/WASD: Move","Space: Jump","R: Hold to reset","Shift: Hold to pan camera","Escape: Pause"],["Are you sure? All progress will be lost","Yes","No"]];
+var pausedMenuOptions=[["Resume","Restart","Options","Controls","Restart Game"],["Back","Speedrun timer: Off","Player images: Yearbook staff"],["Back","Arrow keys/WASD: Move","Space: Jump","R: Hold to reset","Shift: Hold to pan camera","Escape: Pause"],["Are you sure? All progress will be lost","Yes","No"]];
 
 var debug=false;
 
@@ -39,6 +39,8 @@ var waitCounter=0;
 var speedTimer=0;
 var startTime=0;
 var timerShown=false;
+
+var useImages=true;
 
 var solid=[false,true,true,true,true,true];
 
@@ -273,6 +275,10 @@ var update=function() {
                         case 1:
                             pausedMenuOptions[1][1]=(timerShown)?"Speedrun timer: Off":"Speedrun timer: On";
                             timerShown=!timerShown;
+                            break;
+                        case 2:
+                            pausedMenuOptions[1][2]=(useImages)?"Player images: Rectangle":"Player images: Yearbook staff";
+                            useImages=!useImages;
                             break;
                     }
                     break;

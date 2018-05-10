@@ -166,7 +166,12 @@ var player=function(x,y) {
         this.dead=true;
     }
     p.render=function(ctx) {
-        ctx.drawImage(textures[0],anims[animLoaded].getImgX(),anims[animLoaded].getImgY(),anims[animLoaded].w,anims[animLoaded].h,this.rect.x,this.rect.y,this.rect.w,this.rect.h);
+       if (useImages) {
+           ctx.drawImage(textures[0],anims[animLoaded].getImgX(),anims[animLoaded].getImgY(),anims[animLoaded].w,anims[animLoaded].h,this.rect.x,this.rect.y,this.rect.w,this.rect.h);
+       } else {
+           ctx.fillStyle="#00f";
+           ctx.fillRect(this.rect.x,this.rect.y,this.rect.w,this.rect.h);
+       }
     }
     return p;
 }
