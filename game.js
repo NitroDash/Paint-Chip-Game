@@ -317,7 +317,15 @@ var update=function() {
             p.camera.x=p.rect.getCenterX();
             p.camera.y=p.rect.getCenterY();
         }
-        if (keys[5].isDown&&!level.last) {
+        if (keys[9].isDown) {
+            resetCounter++;
+            if (resetCounter>=50) {
+                startLevelLoad(-levelNum,0);
+                resetCounter=0;
+                timerShown=true;
+                pausedMenuOptions[1][1]="Speedrun timer: On";
+            }
+        } else if (keys[5].isDown&&!level.last) {
             resetCounter++;
             if (resetCounter>=50) {
                 startLevelLoad(0,0);
@@ -340,7 +348,7 @@ var startLevelLoad=function(levelsIncremented,delay) {
     waitCounter=delay;
     levelEndAnimDisplayed=true;
     levelNum+=levelsIncremented;
-    if (level.pen&&levelsIncremented==1) {
+    if ((level.pen&&levelsIncremented==1)||(level.last && levelsIncremented==0)) {
         renderPantone(levelTile_ctx,getRandomRGB(),"THE END","",0,0,100,140);
     } else {
         renderPantone(levelTile_ctx,getRandomRGB(),"LEVEL "+(levelNum+1),"",0,0,100,140);
@@ -438,7 +446,11 @@ var render=function() {
         ctx.fillRect(2,2,54,16);
         ctx.fillStyle=black;
         ctx.fillRect(4,4,50,12);
-        ctx.fillStyle="#f00";
+        if (keys[9].isDown) {
+            ctx.fillStyle="#0f0";
+        } else {
+            ctx.fillStyle="#f00";
+        }
         ctx.fillRect(4,4,resetCounter,12);
     }
     if (levelEndAnimDisplayed) {

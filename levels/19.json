@@ -1,12 +1,12 @@
 {
     "grid":[
+        "t ttttt t",
         "t       t",
-        "t       t",
-        "m M p M m",
-        "mmmmmmmmm"
+        "m   p   m",
+        "mtttttttm"
     ],
     "last":true,
     "specialText":[
-        ["PROGRAM","BY"],["REED","PHILLIPS"],["ARTWORK","BY"],["EMMA","HERZOG"]
+        ["PROGRAM","BY"],["REED","PHILLIPS"],["",""],["YEARBOOK",""],["THINK YOU","HOLD M"],["COMING","THURSDAY"],["CAN BEAT","TO PLAY"],["SOON TO","MAY 17 2018"],["REED'S","AGAIN"],["SCHOOLS","AT 3:00 PM"],["TIME OF","WITH A"],["NEAR YOU",""],["3:30.948?","STOPWATCH"],["",""],["ARTWORK","BY"],["EMMA","HERZOG"]
     ]
 }
