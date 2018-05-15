@@ -324,6 +324,7 @@ var update=function() {
                 resetCounter=0;
                 timerShown=true;
                 pausedMenuOptions[1][1]="Speedrun timer: On";
+                speedTimer=0;
             }
         } else if (keys[5].isDown&&!level.last) {
             resetCounter++;
