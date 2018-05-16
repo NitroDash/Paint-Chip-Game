@@ -1,12 +1,12 @@
 {
     "grid":[
-        "t ttttt t",
+        "mtttttttm",
         "t       t",
-        "m   p   m",
+        "t   p   t",
         "mtttttttm"
     ],
     "last":true,
     "specialText":[
-        ["PROGRAM","BY"],["REED","PHILLIPS"],["",""],["YEARBOOK",""],["THINK YOU","HOLD M"],["COMING","THURSDAY"],["CAN BEAT","TO PLAY"],["SOON TO","MAY 17 2018"],["REED'S","AGAIN"],["SCHOOLS","AT 3:00 PM"],["TIME OF","WITH A"],["NEAR YOU",""],["3:30.355?","STOPWATCH"],["",""],["ARTWORK","BY"],["EMMA","HERZOG"]
+        ["PROGRAM","BY"],["REED","PHILLIPS"],["","SENIORS:"],["",""],["YEARBOOK","3:00 PM"],["THINK YOU","HOLD M"],["COMING","MAY 17 2018"],["CAN BEAT","TO PLAY"],["SOON TO",""],["REED'S","AGAIN"],["SCHOOLS","OTHERS:"],["TIME OF","WITH A"],["NEAR YOU","AT THE"],["3:28.576?","TIMER"],["","PICNIC"],["",""],["ARTWORK","BY"],["EMMA","HERZOG"]
     ]
 }
