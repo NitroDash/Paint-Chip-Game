@@ -28,7 +28,7 @@ var paused=false;
 var pauseMenu=0;
 var pauseMenuSpot=0;
 
-var pausedMenuOptions=[["Resume","Restart","Options","Controls","Restart Game"],["Back","Speedrun timer: Off","Player images: Yearbook staff"],["Back","Arrow keys/WASD: Move","Space: Jump","R: Hold to reset","Shift: Hold to pan camera","Escape: Pause"],["Are you sure? All progress will be lost","Yes","No"]];
+var pausedMenuOptions=[["Resume","Restart","Options","Controls","Restart Game"],["Back","Speedrun timer: Off","Player image: Yearbook staff"],["Back","Arrow keys/WASD: Move","Space: Jump","R: Hold to reset","Shift: Hold to pan camera","Escape: Pause"],["Are you sure? All progress will be lost","Yes","No"]];
 
 var debug=false;
 
@@ -172,8 +172,8 @@ var loadLevel=function(id,callback) {
                 level.powered[x].push(false);
             }
         }
-        if (animLoaded!=levelNum%2) {
-            animLoaded=levelNum%2;
+        if (animLoaded!=levelNum%anims.length) {
+            animLoaded=levelNum%anims.length;
             textures[0]=loadImage("images/"+anims[animLoaded].file,0);
             anims[animLoaded].reset();
             doneLoading=callback;
@@ -277,7 +277,7 @@ var update=function() {
                             timerShown=!timerShown;
                             break;
                         case 2:
-                            pausedMenuOptions[1][2]=(useImages)?"Player images: Rectangle":"Player images: Yearbook staff";
+                            pausedMenuOptions[1][2]=(useImages)?"Player image: Paint chip":"Player image: Yearbook staff";
                             useImages=!useImages;
                             break;
                     }

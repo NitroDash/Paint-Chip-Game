@@ -71,8 +71,6 @@ var rect=function(x,y,w,h) {
     return r;
 }
 
-var imgMaps=[0,1,0,2,3];
-
 var playerAnim=function(file,w,h,stepLength) {
     var a={};
     a.file=file;
@@ -86,33 +84,37 @@ var playerAnim=function(file,w,h,stepLength) {
         this.counter=0;
     }
     a.advance=function() {
-        if (this.step==4) {
+        if (this.step==3) {
             this.reset();
         }
         if (this.counter<=0) {
             this.step++;
-            if (this.step>3) {
-                this.step=0;
+            if (this.step>2) {
+                this.step=1;
             }
             this.counter=this.stepLength;
         }
         this.counter--;
     }
     a.jump=function() {
-        this.step=4;
+        this.step=3;
     }
-    a.getImgX=function() {
-        return this.w*imgMaps[this.step];
-    }
-    a.getImgY=function() {
-       return (p.dir)?0:this.h;
+    a.getStep=function() {
+        return this.step;
     }
     return a;
 }
 
 var anims=[
-    playerAnim("testPerson.png",60,100,8),
-    playerAnim("testPerson2.png",60,100,12)
+    playerAnim("adam.png",60,100,8),
+    playerAnim("abraham.png",60,100,8),
+    playerAnim("catalin.png",60,100,8),
+    playerAnim("vicente.png",60,100,8),
+    playerAnim("michelle.png",60,100,8),
+    playerAnim("leah.png",60,100,8),
+    playerAnim("reed.png",60,100,8),
+    playerAnim("elizabeth.png",60,100,8),
+    playerAnim("beesley.png",60,100,8)
 ];
 
 var animLoaded=-1;

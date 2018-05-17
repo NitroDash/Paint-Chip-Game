@@ -3,10 +3,12 @@
         "m         m",
         "m         m",
         "m p       m",
-        "mmmmmttmmgm"
+        "mmmmttttmgm"
     ],
     "specialText":[
+        ["",""],
         ["ARROW","KEYS"],
-        ["(OR WASD)","TO MOVE"]
+        ["(OR WASD)","TO MOVE"],
+        ["",""]
     ]
 }

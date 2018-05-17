@@ -3,7 +3,7 @@ var loadStatus=[];
 
 var srcs=[];
 
-var numImages=1;
+var numImages=2;
 var loaded=0;
 
 var hasSetup=0;
@@ -13,7 +13,11 @@ var debug=true;
 var doneLoading=function() {};
 
 function load() {
-    init();
+    for (var i=0; i<numImages; i++) {
+        textures.push(null);
+        loadStatus.push(0);
+    }
+    textures[1]=loadImage("images/legs.png",1);
 }
 
 function requestLoad(id) {
@@ -44,7 +48,12 @@ function incrementLoad(id) {
         loadStatus[id]=2;
     }
     if (loaded<=0) {
-        doneLoading();
+        if (hasSetup==0) {
+            hasSetup=1;
+            init();
+        } else {
+            doneLoading();
+        }
     }
 }
 

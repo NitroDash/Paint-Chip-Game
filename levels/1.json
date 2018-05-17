@@ -3,9 +3,10 @@
         "m         m",
         "m         m",
         "m p       m",
-        "mmmmttlmmgm"
+        "mmttttlmmgm"
     ],
     "specialText":[
-        ["PRESS","SPACE"],["TO JUMP",""]
+        ["",""],
+        ["PRESS","SPACE"],["TO JUMP",""],["",""]
     ]
 }

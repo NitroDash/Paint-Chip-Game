@@ -167,10 +167,10 @@ var player=function(x,y) {
     }
     p.render=function(ctx) {
        if (useImages) {
-           ctx.drawImage(textures[0],anims[animLoaded].getImgX(),anims[animLoaded].getImgY(),anims[animLoaded].w,anims[animLoaded].h,this.rect.x,this.rect.y,this.rect.w,this.rect.h);
+           ctx.drawImage(textures[1],60*anims[animLoaded].getStep(),this.dir?0:40,60,40,this.rect.x,this.rect.getBottom()-40,60,40);
+           ctx.drawImage(textures[0],this.dir?0:60,0,60,100,this.rect.x,this.rect.y,this.rect.w,this.rect.h);
        } else {
-           ctx.fillStyle="#00f";
-           ctx.fillRect(this.rect.x,this.rect.y,this.rect.w,this.rect.h);
+           renderPantone(ctx,"#00f","BLUE","YOU",this.rect.x,this.rect.y,this.rect.w,this.rect.h);
        }
     }
     return p;

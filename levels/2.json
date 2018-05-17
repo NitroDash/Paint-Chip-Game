@@ -3,7 +3,7 @@
         "m           m",
         "m       m   m",
         "m Mp    m   m",
-        "mmmmmmtmmmmgm"
+        "mmmmmtttmmmgm"
     ],
-    "specialText":[["HOLD R","TO RESET"]]
+    "specialText":[["",""],["HOLD R","TO RESET"],["",""]]
 }
