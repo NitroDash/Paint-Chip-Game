@@ -106,6 +106,9 @@ var playerAnim=function(file,w,h,stepLength) {
 }
 
 var anims=[
+    playerAnim("anna.png",60,100,8),
+    playerAnim("emma.png",60,100,8),
+    playerAnim("bridget.png",60,100,8),
     playerAnim("adam.png",60,100,8),
     playerAnim("abraham.png",60,100,8),
     playerAnim("catalin.png",60,100,8),
